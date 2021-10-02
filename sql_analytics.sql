@@ -1,3 +1,4 @@
+
 How many US mentors and non US mentors are there?
 
 SELECT
@@ -232,7 +233,37 @@ member_id	buy_to_sell_ratio
 45c48c	19.91269871111331881
 a87ff6	7.486010484765204502
 
-step 4 last ques left
+-------------------------------------------------***************************************************************-----------------------------------------------------
+
+
+What is total value of all Ethereum portfolios for each region at the end 
+date of our analysis? Order the output by descending portfolio value
+
+with cte_latest_price as 
+(
+select ticker,price from table price
+where mrkt_date='2021-05-30'
+)
+select m.region,
+sum(
+  case when trns.txn_type='sell' then trans.quantity
+  case when trns.txn_type='buy' then -trans.quantity
+  end
+  )*cte_latest_price.price as eth_value,
+avg(
+  case when trns.txn_type='sell' then trans.quantity
+  case when trns.txn_type='buy' then -trans.quantity
+  end
+  )*cte_latest_price.price as avg_eth_value,
+FROM trading.transactions
+INNER JOIN cte_latest_price
+  ON transactions.ticker = cte_latest_price.ticker
+INNER JOIN trading.members
+  ON transactions.member_id = members.member_id
+WHERE transactions.ticker = 'ETH'
+GROUP BY members.region, cte_latest_price.price
+ORDER BY avg_ethereum_value DESC;
+
 
 
 
