@@ -10,11 +10,12 @@ FROM trading.members
 GROUP BY mentor_region
 ORDER BY mentor_count DESC;
 
-----*****------
 
 mentor_region	mentor_count
 United States	7
 Non US	7
+
+----*****------
 
 How many mentors have a first name starting with a letter before 'E'?
 
@@ -45,12 +46,14 @@ ERROR:  function round(double precision, integer) does not exist
 LINE 3:   ROUND(AVG(price), 2) AS average_eth_price
           ^
 HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
 ---*****-----
 DATE_TRUNC() function can be tremendously useful for 
 aggregating time-based data
 
 DATE_TRUNC returns a TIMESTAMP data type which can be cast back to a regular
 DATE using the ::DATE notation when used in a SELECT query.
+
 ----****--------
 SELECT
   DATE_TRUNC('MON', market_date) AS month_start,
