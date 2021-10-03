@@ -264,9 +264,54 @@ WHERE transactions.ticker = 'ETH'
 GROUP BY members.region, cte_latest_price.price
 ORDER BY avg_ethereum_value DESC;
 
+------*********************************************---------------------------------------------------
+https://github.com/DataWithDanny/sql-masterclass/blob/main/course-content/step6.md
 
+--------------------------------------***************************************************---------------------------
 
+DROP TABLE IF EXISTS temp_portfolio_base;
+CREATE TEMP TABLE temp_portfolio_base AS
+WITH cte_joined_data AS (
+  SELECT
+    members.first_name,
+    members.region,
+    transactions.txn_date,
+    transactions.ticker,
+    CASE
+      WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+      ELSE transactions.quantity
+    END AS adjusted_quantity
+  FROM trading.transactions
+  INNER JOIN trading.members
+    ON transactions.member_id = members.member_id
+  WHERE transactions.txn_date <= '2020-12-31'
+)
+SELECT
+  first_name,
+  region,
+  (DATE_TRUNC('YEAR', txn_date) + INTERVAL '12 MONTHS' - INTERVAL '1 DAY')::DATE AS year_end,
+  ticker,
+  SUM(adjusted_quantity) AS yearly_quantity
+FROM cte_joined_data
+GROUP BY first_name, region, year_end, ticker;
 
+DROP TABLE IF EXISTS temp_cumulative_portfolio_base;
+CREATE TEMP TABLE temp_cumulative_portfolio_base AS
+SELECT
+  first_name,
+  region,
+  year_end,
+  ticker,
+  yearly_quantity,
+  SUM(yearly_quantity) OVER (
+    PARTITION BY first_name, ticker
+    ORDER BY year_end
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS cumulative_quantity
+FROM temp_portfolio_base;
+
+-----------------------------------------*******************************-------------------
+https://github.com/DataWithDanny/sql-masterclass/blob/main/course-content/step7.md
 
 
 
