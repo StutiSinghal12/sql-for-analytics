@@ -33,3 +33,25 @@ select to_char(m1.month_year,'YYYY-MM') AS MONTH,
 rolling_avg from revenue m1
 join revenue m2 on m2.month_year =m1.month_year- INTERVAL '1 months'
 join revenue m3 on m3.month_year =m1.month_year- INTERVAL '2 months'
+
+------------------------------------------------------------------------------------------------------------
+
+WITH WINDOW FUNC
+--define cte with total revenue per month
+--type cast column to date dtype to aggregate
+--filter negavtibve purchase amt
+--use window fun to calulctae roln avg
+--order earliest to latest
+with revenue as
+(
+    select to_date(to_char(created_at::date,'YYYY-MM'),'YYYY-MM-01') as month_year,
+    sum(purchase_amt) as revenue_month
+    from amazon_purchases
+    where purchase_amt>=0
+    group by month_year
+)
+
+select month_year ,
+avg(revenue_month) over (order by month_year rows between  2 preceding and current row)
+as rolln_avg
+from revenue
