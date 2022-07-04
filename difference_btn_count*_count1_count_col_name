@@ -1,0 +1,5 @@
+COUNT(*) counts all the rows including NULLs
+
+COUNT(1) counts all the rows including NULLs (because it replaces even nulls with 1 and then counts the number of 1's)
+
+COUNT(column_name) counts all the rows but not NULLs.
