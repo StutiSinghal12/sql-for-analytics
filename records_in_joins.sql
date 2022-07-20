@@ -82,3 +82,28 @@ inner-->3*2+2*2=10
 left-->6+4+1(null)+1=12
 right-->6+4+1+1=12
 outer-->10+1+1+1+1=14 records
+
+i/p:-
+col A
+1
+2
+1
+5
+null
+null
+
+col B
+2
+5
+5
+null
+
+select c1.cola,c2.colb from tble1 as c1 inner join table2 as c2 on c1.cola=c2.colb or (c1.cola is null and c2.colb is null)
+
+o/p :-
+
+2 2
+5 5
+5 5
+null null
+null null
