@@ -83,6 +83,8 @@ left-->6+4+1(null)+1=12
 right-->6+4+1+1=12
 outer-->10+1+1+1+1=14 records
 
+NULL SAFE JOIN 
+
 i/p:-
 col A
 1
@@ -107,3 +109,6 @@ o/p :-
 5 5
 null null
 null null
+
+or 
+select c1.cola,c2.colb from tble1 as c1 inner join table2 as c2 on c1.cola <=> c2.colb
