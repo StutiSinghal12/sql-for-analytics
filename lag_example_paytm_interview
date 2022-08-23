@@ -1,0 +1,20 @@
+Transactions increase/decrease				
+Name	    Transaction Month. 	Amount	    Last Month Amt	     Delta from last month
+Harshit	     1	                100	            Null	                    null
+Harshit     	2	                200           	100	                      100
+Harshit     	3	              100	200	-100
+Harshit     	4	               100	100	0
+Sarthak    	1	                200	Null	null
+Sarthak	    2	                  300	200	100
+Sarthak	    3                	200	300	-100
+Sarthak	    4	                   300	200	100
+
+
+
+
+with lm as
+(
+select *,lag(amount) over(Partition by name order by transaction_month asc) as last_mnth_amt  from [data_prac]
+)
+
+select d.*,l.last_mnth_amt,(d.amount-l.last_mnth_amt) from [data_prac as d] left join lm as l on l.name=d.name and l.transaction_month=d.transaction_month
