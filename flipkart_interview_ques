@@ -1,0 +1,10 @@
+find employees with same salary-->
+
+
+with cte as(select distinct e.ename as a,e1.salary as b from employee e join 
+employee e1 on e.salary=e1.salary and e.ename!=e1.ename)
+select string_agg(a,',') as emp_name,b as salary from cte
+
+
+Return the departments and the list of employees belonging to them.
+A.) Select deptid,group_concat(ename) as dept_employees from employee group by deptid;
