@@ -1,0 +1,45 @@
+artists Table:
+song_id	artist_id
+101	Ed Sheeran
+120	Drake
+
+songs Table:
+song_id	artist_id
+45202	101
+19960	120
+
+global_song_rank Table:
+day	song_id	rank
+1	45202	5
+3	45202	2
+1	19960	3
+9	19960	15
+
+Example Output:
+artist_name	artist_rank
+Ed Sheeran	1
+Drake	      2
+
+
+
+-- Output the top 5 artist names 
+-- in ascending order along with 
+-- their song appearances ranking (not the number of song appearances, 
+-- but the rank of who 
+-- has the most appearances). The order of the rank should take precedence.
+
+select artist_name,artist_rank from
+(
+select artist_name,dense_rank() over(order by song_cnt desc)as artist_rank
+from
+(
+select a.artist_name,a.artist_id,count(s.song_id) as song_cnt
+from global_song_rank as g left join songs as s on g.song_id=s.song_id
+left join artists as a on a.artist_id=s.artist_id
+where g.rank<=10
+group by 1,2
+
+)tab2
+)tab
+where artist_rank<=5
+order by 2,1
