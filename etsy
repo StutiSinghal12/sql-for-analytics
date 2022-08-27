@@ -1,0 +1,28 @@
+Write a query to obtain the list of customers whose first transaction was valued at $50 or more. Output the number of users.
+
+user_transactions 
+transaction_id	user_id	spend	transaction_date
+759274	111	49.50	02/03/2022 00:00:00
+850371	111	51.00	03/15/2022 00:00:00
+615348	145	36.30	03/22/2022 00:00:00
+137424	156	151.00	04/04/2022 00:00:00
+248475	156	87.00	04/16/2022 00:00:00
+
+
+WITH purchase_num AS (
+  SELECT 
+    user_id, 
+    spend, 
+    RANK() OVER (PARTITION BY user_id 
+      ORDER BY transaction_date ASC
+    ) AS row_num 
+  FROM 
+    user_transactions) 
+
+SELECT 
+  COUNT(DISTINCT user_id) AS users
+FROM 
+  purchase_num 
+WHERE 
+  row_num = 1 
+  AND spend >= 50;
