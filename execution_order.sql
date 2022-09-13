@@ -8,6 +8,6 @@ parsing----> syntax check,semantic check,
              select
              distinct
              order by
-FJWG HSDO
+FILTHY WASHERS GENERATE HALF STAINED OLD LAUNDRY
              
 >>distinct and order by doesn't work together 
