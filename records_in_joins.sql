@@ -112,3 +112,28 @@ null null
 
 or 
 select c1.cola,c2.colb from tble1 as c1 inner join table2 as c2 on c1.cola <=> c2.colb
+
+ques---> 2 tables a and b , table a has 100 records common with 100 records of table b i.e saurabh 100 times in a and 100 times in b.
+what are results of join ??
+
+A - 200 (100 + 100)
+B - 300 (200 + 100)
+
+A 
+Name 
+Saurabh
+Saurabh
+Saurabh
+Saurabh
+Saurabh
+
+B 
+Name 
+Saurabh
+Saurabh
+Saurabh
+Saurabh
+Saurabh
+
+A INNER B ON A.Name = B.Name -> 100 * 100
+A LEFT B ON A.Name = B.Name -> 100 + (100 * 100)
